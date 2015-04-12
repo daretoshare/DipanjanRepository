@@ -1,7 +1,7 @@
 library(caret)
 library(doSNOW)
 ##Read the raw file
-ottotrain<-read.csv(choose.files())
+ottotrain<-read.csv("/home/dipanjan/DipanjanRepository/train.csv/train.csv")
 
 ##draw 75% stratified sample for training and rest for testing
 createDataPartition(ottotrain$target, p = .75, list=FALSE)->partition
@@ -29,3 +29,7 @@ gbmFit <- train(target ~ ., data = tr,
                  verbose = FALSE)
 
 stopCluster(cl)
+
+save(gbmFit,file="gbm.RData")
+predict(gbmFit, newdata = ts)->pre
+confusionMatrix(ts$target, pre)
