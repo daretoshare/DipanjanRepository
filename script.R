@@ -1,4 +1,4 @@
-ottotrain<-read.csv(choose.files())
+ottotrain<-read_csv(choose.files())
 sample(rows, size= 45350, replace=FALSE)->traininginde
 tr<-ottotrain[trainingindex,]
 ts<-ottotrain[-trainingindex,]
