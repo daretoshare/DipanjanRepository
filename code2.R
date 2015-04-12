@@ -1,5 +1,7 @@
+library(caret)
+library(doSNOW)
 ##Read the raw file
-ottotrain<-read_csv(choose.files())
+ottotrain<-read.csv(choose.files())
 
 ##draw 75% stratified sample for training and rest for testing
 createDataPartition(ottotrain$target, p = .75, list=FALSE)->partition
@@ -18,7 +20,7 @@ fitControl <- trainControl(
   repeats = 5)
 
 cl <- makeCluster(3)
-registerDoParallel(cl)
+registerDoSNOW(cl)
 ## fitting a Gradient Boosting Machine with 5 CV training control
 set.seed(1)
 gbmFit <- train(target ~ ., data = tr,
