@@ -57,3 +57,18 @@ knnfit<-train(target ~ ., data = tr,
                 preProcess = c("center","scale"),
               tuneLength = 20,
               trControl = fitControl)
+
+
+
+
+
+MultiLogLoss <- function(act, pred)
+{
+  eps = 1e-15;
+  nr <- nrow(pred)
+  pred = matrix(sapply( pred, function(x) max(eps,x)), nrow = nr)      
+  pred = matrix(sapply( pred, function(x) min(1-eps,x)), nrow = nr)
+  ll = sum(act*log(pred) )
+  ll = ll * -1/(nrow(act))      
+  return(ll);
+}
