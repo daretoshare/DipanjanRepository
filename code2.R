@@ -19,17 +19,17 @@ fitControl <- trainControl(
   ## repeated ten times
   repeats = 5)
 
-cl <- makeCluster(3)
+cl <- makeCluster(4)
 registerDoSNOW(cl)
 ## fitting a Gradient Boosting Machine with 5 CV training control
 set.seed(1)
-gbmFit <- train(target ~ ., data = tr,
-                 method = "gbm",
+rfFit <- train(target ~ ., data = tr,
+                 method = "rf",
                  trControl = fitControl,
                  verbose = FALSE)
 
 stopCluster(cl)
 
-save(gbmFit,file="gbm.RData")
-predict(gbmFit, newdata = ts)->pre
+save(rfFit,file="rf.RData")
+predict(rfFit, newdata = ts)->pre
 confusionMatrix(ts$target, pre)
