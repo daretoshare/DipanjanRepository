@@ -1,5 +1,6 @@
 library(caret)
 library(doSNOW)
+library(reshape2)
 ##Read the raw file
 ##ottotrain<-read.csv("/home/dipanjan/DipanjanRepository/train.csv/train.csv")
 ottotrain<-read.csv(paste0(getwd(),"/train.csv/train.csv"))
@@ -38,19 +39,21 @@ save(gbmFit,file="gbm.RData")
 predict(gbmFit, newdata = ts)->pre
 confusionMatrix(ts$target, pre)
 
+pred.py<-read.csv("data/w.csv", header=FALSE)
 
+library(reshape2)
 ## model scoring on new data
-ottotest<-read.csv(paste0(getwd(),"/test.csv/test.csv"))
+ottotest<-read.csv(paste0(getwd(),"/data/test.csv"))
 ##predict(gbmFit, newdata = ottotest)->prediction
 predict(rfFit, newdata = ottotest)->prediction
-ottotest$pred<-prediction
+ottotest$pred<-pred.py.v
 ottotest<-ottotest[,c(1,95)]
 dcast(ottotest, id ~ pred)->int
 int->final
 final[!is.na(final)]<-1
 final[is.na(final)]<-0
 final$id<-int$id
-write.csv(final,"rfSub.csv", row.names=FALSE)
+write.csv(final,"pySub.csv", row.names=FALSE)
 
 knnfit<-train(target ~ ., data = tr,
                  method = "knn",
